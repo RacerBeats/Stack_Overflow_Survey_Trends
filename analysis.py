@@ -1,5 +1,9 @@
+#Import relevant libraries
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 
+# Read data
 data = pd.read_csv("developer_dataset.csv")
 print(data.columns)
 print(data.count())
@@ -25,4 +29,21 @@ data.drop(['NEWJobHunt','NEWJobHuntResearch', 'NEWLearn'],
     axis=1,
     inplace=True)
 
-print(f'\nafter drop: \n{data.columns}')
+# check to confirm drop success
+#print(f'\nafter drop: \n{data.columns}') 
+
+#Analyze Devs by country
+''' task: look at distribution of employment and dev type to country '''
+
+data[['RespondentID','Country']].groupby('Country').count()
+
+missingData = data[['Employment','DevType']].isnull().groupby(data['Country']).sum().reset_index()
+
+A=sns.catplot(
+    data=missingData, kind="bar",
+    x="Country", y="Employment",
+    height = 6, aspect = 2)
+B=sns.catplot(
+    data=missingData, kind="bar",
+    x="Country", y="DevType",
+    height = 6, aspect = 2)
